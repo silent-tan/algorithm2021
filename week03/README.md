@@ -64,3 +64,82 @@ public:
     }
 };
 ```
+
+## 210. 课程表 II
+
+### 解题思路
+**主体思路**
+
+1. 构建出边数组
+2. 以入度为0的点作为图遍历的起点
+3. 使用BFS进行遍历
+
+**细节**
+
+- 入度为0的点出队后，指向边的点入度数减1
+
+### 代码
+
+```cpp
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        n = numCourses;
+        // 初始化出边数组，n个空 list
+        edges = vector<vector<int>>(n, vector<int>());
+        // 初始化所有课程的入度
+        inDeg = vector<int>(n, 0);
+        // 构造图的出边数组
+        for(vector<int>& pre : prerequisites) {
+            int u = pre[0];
+            int v = pre[1];
+            // 加边
+            addEdge(v, u);
+        }
+
+        topSort();
+        if (ans.size() != numCourses) {
+            return {};
+        }
+        return ans;
+    }
+
+private:
+    int n;
+    vector<int> ans{};
+    vector<vector<int>> edges;
+    vector<int> inDeg; // 入度
+
+    // 出边数组元素x，添加指向 y 的边
+    void addEdge(int x, int y) {
+        edges[x].push_back(y);
+        inDeg[y]++;
+    }
+
+    /**
+     * 基于 BFS 的拓扑排序
+     */
+    void topSort() {
+        // 基于 BFS，需要队列
+        queue<int> q;
+        // 从所有零入度出发
+        for (int i = 0; i < n; i++) {
+            if (inDeg[i] == 0) q.push(i);
+        }
+        // 执行 BFS
+        while(!q.empty()) {
+            int x = q.front();
+            // 只要出队了，表明这个课程可以学完
+            q.pop();
+            ans.push_back(x);
+            // 考虑 x 的所有出边
+            for(int y: edges[x]) {
+                inDeg[y]--;
+                if (inDeg[y] == 0) {
+                    q.push(y);
+                }
+            }
+        }
+    }
+};
+```
