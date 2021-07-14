@@ -100,3 +100,51 @@ private:
  * obj->unfollow(followerId,followeeId);
  */
 ```
+
+## 295. 数据流中的中位数
+
+### 解题思路
+- 堆顶特征
+- 输入的时候维护堆大小
+- 最大堆维护小数，最小堆维护大数，中值要么是最大堆的堆顶，要么是两个堆的堆顶取平均数
+
+### 代码
+
+```cpp
+class MedianFinder {
+public:
+    /** initialize your data structure here. */
+    MedianFinder() {
+    }
+    
+    void addNum(int num) {
+        // 最大堆添加一个元素
+        lo.push(num);
+        // 把最大堆的最大数字给最小堆，并出队
+        hi.push(lo.top());
+        lo.pop();
+
+        // 如果最小堆的个数比最大堆个数多，把最小的元素出队给最大堆
+        if (lo.size() < hi.size()) {
+            lo.push(hi.top());
+            hi.pop();
+        }
+    }
+    
+    double findMedian() {
+        return lo.size() > hi.size() ? (double) lo.top() : (lo.top() + hi.top()) * 0.5;
+    }
+private:
+    // 最大堆，存储较小一半的数字
+    priority_queue<int> lo;
+    // 最小堆，存储较大一半的数字
+    priority_queue<int, vector<int>, greater<int>> hi;
+};
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder* obj = new MedianFinder();
+ * obj->addNum(num);
+ * double param_2 = obj->findMedian();
+ */
+```
