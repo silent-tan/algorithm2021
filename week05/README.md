@@ -63,3 +63,55 @@ private:
     }
 };
 ```
+
+## 875. 爱吃香蕉的珂珂
+
+### 解题思路
+**主体思路**
+- 存在两个极值
+- 存在满足条件
+
+故使用二分法
+
+**细节**
+- 二分法端点不用关注精确值，故取最小值为1
+- a/b 向上取整: (a+b-1)/b
+
+### 代码
+
+```cpp
+class Solution {
+public:
+    int minEatingSpeed(vector<int>& piles, int h) {
+        // 最小速度为1
+        int _min = 1;
+        // 比目标速度还要快的速度可以吃完香蕉的速度为：1小时内能吃完一堆，也即最大堆的数量(piles.length <= H)
+        int _max = 0;
+        for(auto p: piles) {
+            _max = max(_max, p);
+        }
+        // 二分法模板
+        int l = _min, r = _max;
+        while(l < r) {
+            int mid = (l + r) / 2;
+            if (satify(piles, h, mid)) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        return r;
+    }
+private:
+    bool satify(vector<int>& piles, int h, int K) {
+        // 当前时间
+        int cur = 0;
+        for (auto p: piles) {
+            // 当前缀需要x小时吃完
+            cur += (p + K - 1) / K;
+        }
+
+        return cur <= h;
+    }
+};
+```
