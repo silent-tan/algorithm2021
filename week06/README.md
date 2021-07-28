@@ -33,3 +33,30 @@ public:
     }
 };
 ```
+
+## 55. 跳跃游戏
+### 解题思路
+**主体思路**
+如果可以到达第 n 个位置，必然可以到达 n - 1 个位置 可以推导 如果能够到达第 n 个位置，必然可以到达任意位置
+
+**细节**
+如果当前位置比最远跳跃距离大，证明该位置不可到达，即最后的位置不可到达
+
+### 代码
+
+```cpp
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        // 从起点开始，对每个起跳点起跳，然后更新能够调到的最大位置
+        int max_jump = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            if (i > max_jump) {
+                return false;
+            }
+            max_jump = max(max_jump, i + nums[i]);
+        }
+        return true;
+    }
+};
+```
