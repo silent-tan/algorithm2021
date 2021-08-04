@@ -83,5 +83,65 @@ public:
     }
 };
 
+```
 
+## 684. 冗余连接
+
+### 解题思路
+
+主体思路：
+
+- 如果遍历中根节点不相同，则在未联通前不存在环
+- 如果遍历中根节点相同，则说明在未进行遍历前，该边已经联通
+
+### 代码
+
+```cpp
+class DisjoinSet {
+public:
+    int size = 0;
+    DisjoinSet(int n) {
+        size = n;
+        fa = vector<int>(n);
+        for(int i = 0; i < n; i++) {
+            fa[i] = i;
+        }
+    }
+    int find(int x) {
+        if (x == fa[x]) return x;
+        fa[x] = find(fa[x]);
+        return fa[x];
+    }
+    void unionSet(int x, int y) {
+        int xFa = find(x);
+        int yFa = find(y);
+        if (xFa != yFa) fa[xFa] = yFa;
+    }
+    vector<int> getFa() {
+        return fa;
+    }
+private:
+    vector<int> fa;
+};
+
+class Solution {
+public:
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        // 点最多比数组长度多 1
+        DisjoinSet ds = DisjoinSet(edges.size() + 1);
+
+        for (auto& edge: edges) {
+            int n1 = edge[0];
+            int n2 = edge[1];
+
+            if (ds.find(n1) != ds.find(n2)) {
+                ds.unionSet(n1, n2);
+            } else {
+                return edge;
+            }
+        }
+
+        return {};
+    }
+};
 ```
