@@ -48,3 +48,27 @@ function reverseWords(s: string): string {
     return s.split(' ').map(str => str.trim()).filter(str => str != '').reverse().join(' ')
 };
 ```
+
+## 14. 最长公共前缀
+
+### 解题思路
+**主体思路**
+
+暴力解法，因为是前缀，所以必然是开头的，只要暴力遍历就可以了
+
+### 代码
+
+```typescript
+function longestCommonPrefix(strs: string[]): string {
+    let ans = '';
+    if (!strs.length) return ans;
+
+    for (let j = 0; j < strs[0].length; j++) {
+        for (let i = 1; i < strs.length; i++) {
+            if (strs[i][j] != strs[0][j]) return ans
+        }
+        ans += strs[0][j];
+    }
+    return ans;
+};
+```
