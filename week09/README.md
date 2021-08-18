@@ -71,3 +71,51 @@ public:
     }
 };
 ```
+
+## 239. 滑动窗口最大值
+### 解题思路
+
+**主体思路**
+
+- 暴力滑动，优先队列维护窗口最大值
+- 优先队列队头一直是最大值
+
+**细节**
+
+如果最大值在窗口内，是不需要出队的
+
+### 代码
+
+```cpp
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        int size = nums.size();
+        // pari<元素, 数组下标>
+        priority_queue<pair<int, int>> q;
+        // 初始化
+        for (int i = 0; i < k; i++) {
+            q.emplace(nums[i], i);
+        }
+
+        // 初始化队头为最大
+        vector<int> ans = {q.top().first};
+
+        // 滑动窗口
+        for (int i = k; i < size; i++) {
+            // 入队
+            q.emplace(nums[i], i);
+
+            // 如果最大值不在窗口内，最大值出队
+            while(q.top().second <= i - k) {
+                q.pop();
+            }
+
+            // 更新答案
+            ans.push_back(q.top().first);
+        }
+
+        return ans;
+    }
+};
+```
