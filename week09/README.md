@@ -59,7 +59,7 @@ public:
                     continue;
                 }
 
-                // 如果可以走，则进入队列，标记已走
+                // 如果可以走，则进入队列，标记已走步数
                 if (grid[next_x][next_y] == 0) {
                     q.emplace(next_x, next_y);
                     grid[next_x][next_y] = len + 1;
